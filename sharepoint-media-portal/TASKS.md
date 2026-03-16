@@ -1,32 +1,41 @@
 # TASKS
 
-- [ ] Kommunikationswebsite "Product Media Hub" erstellen.
-- [ ] Externe Freigabe für Site gemäß Tenant-Policy auf "Anyone links" konfigurieren.
-- [ ] Bibliothek `Media` anlegen.
-- [ ] Ordnerstruktur initialisieren:
-  - [ ] `/Media/Videos/Produktlinie-A`
-  - [ ] `/Media/Videos/Produktlinie-B`
-  - [ ] `/Media/Bilder/Produktlinie-A`
-  - [ ] `/Media/Bilder/Produktlinie-B`
-- [ ] Metadaten-Spalten anlegen (`Medientyp`, `Kategorie`, `Sprache`, `Region`, `Freigabestatus`).
-- [ ] Pflichtfelder definieren (mindestens `Kategorie`, `Freigabestatus`).
-- [ ] Ansichten erstellen:
-  - [ ] "Videos nach Kategorie"
-  - [ ] "Bilder nach Kategorie"
-  - [ ] "Neueste Inhalte"
-- [ ] Startseite mit Webparts aufbauen:
-  - [ ] `Highlighted Content` für Videos/Bilder
-  - [ ] `Image Gallery` für Bildbibliothek
-  - [ ] `Document Library` mit Vorschauansicht
-- [ ] Berechtigungsgruppen anlegen und zuweisen:
-  - [ ] `MediaHub Owners` (IT/Admin)
-  - [ ] `MediaHub Contributors` (wenige interne Schreiber)
-  - [ ] `MediaHub Readers` (alle internen Leser)
-- [ ] Sicherstellen: Externe Links nur "View", keine externen Schreibrechte.
-- [ ] Kurzanleitung für Vertrieb (Upload + Linkfreigabe) erstellen.
-- [ ] Testlauf mit 1 Verkäufer und 1 externem Kunden durchführen:
-  - [ ] Video direkt im Browser abspielen
-  - [ ] Bilder als Galerie durchblättern
-  - [ ] Schreibschutz für Nicht-Contributors validieren
-- [ ] Go-Live nach erfolgreichem Test und Governance-Freigabe.
-- [ ] Monatlichen Review-Termin für Content und Freigaben einplanen.
+- [ ] Kommunikationswebsite "Product Media Hub" erstellen (oder bestehende dedizierte Site vorbereiten).
+- [ ] Bibliothek `Media` als einzige Quelle anlegen/validieren.
+- [ ] Metadaten-Spalten anlegen:
+  - [ ] `AssetType` (Video/Bild)
+  - [ ] `Category`
+  - [ ] `ShareSet` (Mehrfachauswahl)
+  - [ ] `AudiencePolicy` (`AlwaysAll`, `Selective`)
+- [ ] Pflichtfelder definieren: mindestens `AssetType`, `ShareSet`.
+- [ ] ShareSets initial konfigurieren:
+  - [ ] `ALL_MEDIA`
+  - [ ] `ALL_VIDEOS`
+  - [ ] `A_3_VIDEOS`
+  - [ ] `B_4_VIDEOS`
+- [ ] Bestehende Assets mappen:
+  - [ ] relevante 3 Videos für Person A taggen (`A_3_VIDEOS`)
+  - [ ] relevante 4 Videos für Person B taggen (`B_4_VIDEOS`)
+  - [ ] alle Videos/Bilder für Dauerempfänger XYZ mit `ALL_MEDIA` sicherstellen
+- [ ] Bibliotheksansichten erstellen:
+  - [ ] `View_ALL_MEDIA`
+  - [ ] `View_ALL_VIDEOS`
+  - [ ] `View_A_3_VIDEOS`
+  - [ ] `View_B_4_VIDEOS`
+- [ ] Seite/Quick-Links bauen:
+  - [ ] "Alles teilen" (Link auf `View_ALL_MEDIA`)
+  - [ ] "Selektive Freigabe" (Links auf A/B-Views)
+- [ ] Berechtigungsgruppen prüfen und zuweisen:
+  - [ ] `MediaHub Owners`
+  - [ ] `MediaHub Contributors`
+  - [ ] `MediaHub Readers`
+- [ ] Externe Linkstrategie festlegen (`Anyone` oder `Specific people`) und dokumentieren.
+- [ ] Kurzanleitung für Vertrieb erstellen:
+  - [ ] Upload + Tagging
+  - [ ] Welcher Link für welchen Empfänger
+- [ ] Testfälle durchführen:
+  - [ ] Person A sieht nur 3 definierte Videos
+  - [ ] Person B sieht nur 4 definierte Videos
+  - [ ] Person XYZ sieht alle Videos und Bilder
+  - [ ] Keine Medienkopie wurde erzeugt
+- [ ] Go-Live nach erfolgreicher Abnahme durch Vertrieb + IT-Governance.
