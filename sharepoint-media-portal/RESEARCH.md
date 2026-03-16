@@ -1,47 +1,65 @@
 # RESEARCH
 
 ## Zielbild
-- Neue, dedizierte SharePoint Online Site für dauerhafte Bereitstellung von Produktmedien (Videos, Bilder) an externe Kunden.
-- Zugriff ohne Passwort für Empfänger (anonyme/"Anyone"-Freigabelinks), soweit durch Tenant-Richtlinien erlaubt.
-- Sehr einfache Pflege durch Vertrieb (Upload in vordefinierte Ordnerstruktur, keine Seitenentwicklung).
-- Medien sollen direkt auf der SharePoint-Seite konsumierbar sein (Video-Streaming und Bildansicht als Galerie/Bibliothek).
+- Neue, dedizierte SharePoint Online Site für dauerhafte Bereitstellung von Produktmedien (Videos, Bilder) an externe Empfänger.
+- **Single Source of Truth**: Jedes Video ist genau einmal in SharePoint gespeichert und wird nur referenziert/gefiltert geteilt (keine Datei-Duplikate pro Empfängergruppe).
+- Zwei Freigabemodi:
+  - **Massenfreigabe**: "Alles teilen" in einem Schritt.
+  - **Selektive Freigabe**: Unterschiedliche Empfänger erhalten unterschiedliche Videomengen (z. B. Person A = 3 Videos, Person B = 4 Videos).
+- Erweiterte Zielgruppe: Es gibt Empfänger, die dauerhaft **alle Videos und alle Bilder** erhalten sollen.
 
-## Ausgangslage und Anforderungen
-- Bestehende SharePoint-Seite ist für temporäre externe Zusammenarbeit ausgelegt.
-- Neuer Use Case ist "always-on" Produktbereitstellung statt zeitlich befristeter Projektaustausch.
-- Content-Typen:
+## Aktualisierte Anforderungen (überschreibt frühere Teilannahmen)
+- Frühere Annahme "eine Linkstrategie für alle" reicht nicht aus.
+- Stattdessen wird ein Modell mit wiederverwendbaren Freigabe-Sets benötigt:
+  - Set `ALL_MEDIA` (alle Videos + alle Bilder)
+  - Set `ALL_VIDEOS`
+  - kundenspezifische Sets (z. B. `A_3_VIDEOS`, `B_4_VIDEOS`)
+- Selektive Freigaben dürfen den Single-Source-of-Truth-Ansatz nicht brechen.
+- Freigabe soll für Vertrieb mit minimalem Aufwand ausführbar sein (ohne Seitenentwicklung).
+
+## Ausgangslage und Constraints
+- Bestehende SharePoint-Seite ist für temporäre Zusammenarbeit ausgelegt; neuer Use Case ist "always-on" Medienbereitstellung.
+- Inhalte:
   - Produktvideos
   - Produktbilder
-- Beide Content-Typen benötigen Kategorienstruktur.
-- Nicht-funktionale Anforderung: Bedienbarkeit für Nicht-Admins/Nicht-Entwickler.
-- Berechtigungsanforderung: Alle dürfen lesen, aber nur wenige interne Accounts dürfen schreiben.
+- Nicht-funktional:
+  - einfache Bedienung für Nicht-Admins
+  - nachvollziehbare Berechtigungen/Freigaben
+  - geringe Betriebslast trotz mehrerer Empfängergruppen
 
-## Technische Prüfung: Streaming und Bibliotheksansicht
-- Videos können in SharePoint Online direkt im Browser abgespielt werden (Dateivorschau/Player über Stream on SharePoint).
-- Bilder können direkt in SharePoint als Vorschaubilder betrachtet werden (Document Library mit Thumbnails und Image Gallery Webpart).
-- Für externe Empfänger ist die direkte Anzeige möglich, wenn der Linktyp "Anyone can view" und die Dateitypen browserfähig sind.
-- Für einen "Medienkatalog" auf der Seite eignen sich kombinierte Webparts:
-  - `Highlighted Content` für gefilterte Video-/Bildlisten
-  - `Image Gallery` für visuelle Bildbibliothek
-  - `Document Library` für Dateiansicht mit Vorschau/Sortierung
+## Technische Bewertung: Datenmodell für Single Source of Truth
+- Zentrale Bibliothek `Media` bleibt führend; dort liegt jede Datei genau einmal.
+- Segmentierung erfolgt über Metadaten statt Kopien, z. B.:
+  - `AssetType` (Video/Bild)
+  - `Category`
+  - `ShareSet` (Mehrfachauswahl, z. B. `ALL_MEDIA`, `A_3_VIDEOS`)
+  - `AudiencePolicy` (z. B. `AlwaysAll`, `Selective`)
+- Für "alles teilen" kann ein statischer Gesamtlink auf gefilterte Ansicht/Seite genutzt werden.
+- Für selektive Freigaben werden gefilterte Ansichten oder Empfänger-spezifische Seiten verwendet, die auf derselben Bibliothek basieren.
 
-## Technische Randbedingungen (Microsoft 365 / SharePoint Online)
-- Externe Freigabe muss für Tenant und Site aktiviert sein.
-- Anonymer Zugriff wird über "Anyone links" gesteuert; kann per Ablaufdatum und Download-Blockierung eingeschränkt werden.
-- Für Videos ist Streaming über SharePoint/OneDrive möglich; bei sehr großem Volumen ist Stream on SharePoint weiterhin auf Dateibibliotheken aufsetzend.
-- Berechtigungen sollten über Gruppen und Bibliotheksebene statt Dateiebene gemanagt werden, um Wartungsaufwand zu minimieren.
+## Technische Optionen für Freigabemodell
+1. **Ansichtsbasierte Freigabe (empfohlen für Einfachheit)**
+   - Pro Freigabe-Set eine gefilterte Bibliotheksansicht/Seite.
+   - Vertrieb wählt nur das passende Set und sendet den zugehörigen Link.
+2. **Ordnerbasierte Freigabe (nicht bevorzugt)**
+   - Würde bei selektiver Freigabe schnell zu Kopierdruck führen.
+   - Kollidiert mit Single Source of Truth.
+3. **Automatisierte Linkbereitstellung via Power Automate (optional)**
+   - Formular: Empfänger + gewünschtes Set.
+   - Flow erzeugt/holt passenden View-Link und versendet.
 
-## Risiken und Governance
-- Risiko Datenabfluss bei anonymen Links.
-- Risiko unstrukturierter Ablage bei fehlenden Namens- und Upload-Standards.
-- Risiko steigender Betriebsaufwand bei zu granularer Berechtigungsvergabe.
+## Sicherheits- und Governance-Aspekte
+- Externe Freigabe muss tenant- und site-seitig erlaubt sein.
+- `Anyone`-Links sind möglich, sollten aber klar geregelt sein (Ablaufdatum, periodischer Review).
+- Alternativ für strengere Steuerung: "Specific people"-Links je Empfänger.
+- Auditierbarkeit der Freigaben über M365 Unified Audit Log und Sharing Reports.
 
-## Compliance- und Betriebsanforderungen
-- Link-Ablaufzeiten für externe Freigaben definieren (z. B. 90/180 Tage), falls dauerhaft "ohne Passwort" gefordert ist zumindest regelmäßige Link-Reviews.
-- Sensitivitätslabels/Conditional Access prüfen, damit nur freizugebende Produktmedien in diese Site gelangen.
-- Auditierbarkeit sicherstellen (M365 Unified Audit Log, Sharing Reports).
+## Risiken
+- Zu viele manuelle Empfängersets können Pflegeaufwand erhöhen.
+- Falsch gepflegte Metadaten führen zu falschen Freigabeinhalten.
+- Offene `Anyone`-Links erhöhen Weiterleitungsrisiko.
 
 ## Annahmen
-- Nur definierte interne Accounts erhalten Bearbeitungsrechte.
-- Kunden und sonstige interne Nutzer sollen lesen/streamen, aber keine Inhalte ändern.
-- Inhalte sind marketing-/vertriebsfreigegeben und dürfen extern veröffentlicht werden.
+- Vertrieb pflegt Metadaten/Freigabesets zuverlässig.
+- Inhalte sind extern teilbar (rechtlich/vertraglich freigegeben).
+- Für "Person XYZ" existiert ein dauerhaft nutzbares Vollzugriffs-Set (`ALL_MEDIA`) mit stabilem Link.
