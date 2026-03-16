@@ -1,0 +1,32 @@
+# TASKS
+
+- [ ] Kommunikationswebsite "Product Media Hub" erstellen.
+- [ ] Externe Freigabe für Site gemäß Tenant-Policy auf "Anyone links" konfigurieren.
+- [ ] Bibliothek `Media` anlegen.
+- [ ] Ordnerstruktur initialisieren:
+  - [ ] `/Media/Videos/Produktlinie-A`
+  - [ ] `/Media/Videos/Produktlinie-B`
+  - [ ] `/Media/Bilder/Produktlinie-A`
+  - [ ] `/Media/Bilder/Produktlinie-B`
+- [ ] Metadaten-Spalten anlegen (`Medientyp`, `Kategorie`, `Sprache`, `Region`, `Freigabestatus`).
+- [ ] Pflichtfelder definieren (mindestens `Kategorie`, `Freigabestatus`).
+- [ ] Ansichten erstellen:
+  - [ ] "Videos nach Kategorie"
+  - [ ] "Bilder nach Kategorie"
+  - [ ] "Neueste Inhalte"
+- [ ] Startseite mit Webparts aufbauen:
+  - [ ] `Highlighted Content` für Videos/Bilder
+  - [ ] `Image Gallery` für Bildbibliothek
+  - [ ] `Document Library` mit Vorschauansicht
+- [ ] Berechtigungsgruppen anlegen und zuweisen:
+  - [ ] `MediaHub Owners` (IT/Admin)
+  - [ ] `MediaHub Contributors` (wenige interne Schreiber)
+  - [ ] `MediaHub Readers` (alle internen Leser)
+- [ ] Sicherstellen: Externe Links nur "View", keine externen Schreibrechte.
+- [ ] Kurzanleitung für Vertrieb (Upload + Linkfreigabe) erstellen.
+- [ ] Testlauf mit 1 Verkäufer und 1 externem Kunden durchführen:
+  - [ ] Video direkt im Browser abspielen
+  - [ ] Bilder als Galerie durchblättern
+  - [ ] Schreibschutz für Nicht-Contributors validieren
+- [ ] Go-Live nach erfolgreichem Test und Governance-Freigabe.
+- [ ] Monatlichen Review-Termin für Content und Freigaben einplanen.
