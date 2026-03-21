@@ -1,41 +1,41 @@
 # project-blueprints
 
-This repository stores project specific research, planning, task
-tracking, and verification guidance.
+Dieses Repository enthält projektspezifische Unterlagen zu Recherche,
+Planung, Aufgabenverfolgung und Verifizierungsrichtlinien.
 
-## Required structure
+## Erforderliche Struktur
 
-Each project must use one folder.
+Jedes Projekt muss genau einen Ordner verwenden.
 
-Each project folder must contain these files:
+Jeder Projektordner muss diese Dateien enthalten:
 
 `RESEARCH.md`
 `PLAN.md`
 `TASKS.md`
 `TESTS.md`
 
-## File purpose
+## Zweck der Dateien
 
 `RESEARCH.md`
-Facts, requirements, constraints, references, and technical findings.
+Fakten, Anforderungen, Rahmenbedingungen, Referenzen und technische Erkenntnisse.
 
 `PLAN.md`
-Proposed solution, structure, design decisions, and implementation order.
+Vorgeschlagene Lösung, Struktur, Designentscheidungen und Reihenfolge der Umsetzung.
 
 `TASKS.md`
-Concrete execution steps as a task list.
+Konkrete Umsetzungsschritte als Aufgabenliste.
 
 `TESTS.md`
-Runnable checks that verify successful implementation.
+Ausführbare Prüfungen zur Verifikation einer erfolgreichen Umsetzung.
 
-## Rules for AI
+## Regeln für KI
 
-1. Use exactly one folder per project.
-2. Keep all content inside the matching project folder.
-3. Do not create extra files unless explicitly requested.
-4. Fill `RESEARCH.md` first.
-5. Then create `PLAN.md`.
-6. Then create `TASKS.md`.
-7. Then create `TESTS.md`.
-8. Keep content precise, technical, and project specific.
-9. Keep `TESTS.md` focused on executable validation, not long explanations.
+1. Verwende pro Projekt genau einen Ordner.
+2. Halte alle Inhalte innerhalb des zugehörigen Projektordners.
+3. Erstelle keine zusätzlichen Dateien, außer wenn dies ausdrücklich verlangt wird.
+4. Fülle zuerst `RESEARCH.md` aus.
+5. Erstelle danach `PLAN.md`.
+6. Erstelle danach `TASKS.md`.
+7. Erstelle danach `TESTS.md`.
+8. Halte die Inhalte präzise, technisch und projektspezifisch.
+9. Halte `TESTS.md` auf ausführbare Validierung fokussiert, nicht auf lange Erklärungen.
