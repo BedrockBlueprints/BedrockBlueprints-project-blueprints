@@ -1,80 +1,91 @@
 # PLAN
 
 ## 1) Site-Architektur
-- Site-Typ: Kommunikationswebsite (Communication Site).
-- Zentraler Inhaltscontainer: eine Bibliothek `Media` als einzige Datenquelle.
-- Seiten/Navigation:
+- Site-Typ: Kommunikationswebsite oder dedizierte Team-Site mit externer Freigabe.
+- Zentrale Medienbibliothek: `Media` als einzige Dateiablage.
+- Zusätzliche Struktur für Freigabefälle:
+  - bevorzugt Liste `Customer Shares` für Freigabe-Metadaten,
+  - optional Seitenbibliothek mit Vorlage `Customer Share Template`.
+- Navigation:
   - Start
-  - Alle Videos
-  - Alle Bilder
-  - Alles teilen (Videos + Bilder)
-  - Selektive Freigabe
+  - Media Library
+  - Customer Shares
+  - Alles teilen
+  - Anleitung Vertrieb
 
-## 2) Informationsarchitektur (Single Source of Truth)
-- Keine Medienkopien pro Kunde/Empfänger.
-- Dateiablage nur einmal in `Media`.
-- Metadatenmodell:
+## 2) Informationsarchitektur
+- Dateien liegen physisch nur in `Media`.
+- Metadaten in `Media`:
   - `AssetType` (Video/Bild)
   - `Category`
-  - `ShareSet` (Mehrfachauswahl)
-  - `AudiencePolicy` (`AlwaysAll`, `Selective`)
-  - optional `Language`, `Region`, `ReleaseStatus`
-- Governance-Regel: Selektive Bereitstellung erfolgt nur über Filter/Views auf Basis dieser Metadaten.
+  - `Language` (optional)
+  - `Region` (optional)
+  - `ReleaseStatus` (optional)
+- Metadaten im Freigabefall:
+  - `CustomerName`
+  - `ShareTitle`
+  - `SelectedAssets` (Referenzen auf Medien)
+  - `LinkType` (`Anyone`/`SpecificPeople`)
+  - `ExpiryDate` (optional)
+  - `Owner`
 
 ## 3) Freigabemodell
-- Vordefinierte Freigabesets:
-  - `ALL_MEDIA` → alle Videos + alle Bilder
-  - `ALL_VIDEOS` → alle Videos
-  - `A_3_VIDEOS` → genau die drei Videos für Person A
-  - `B_4_VIDEOS` → genau die vier Videos für Person B
-- Für jede Zielgruppe wird ein stabiler Share-Link auf die passende Ansicht/Seite bereitgestellt.
-- "Alles auf einmal teilen" bedeutet: Vertrieb nutzt genau einen Link auf `ALL_MEDIA`.
-- "Selektiv teilen" bedeutet: Vertrieb nutzt Link aus passendem ShareSet.
+- Zwei Modi:
+  - Standardfreigabe über feste Links wie `ALL_MEDIA`.
+  - Selektive Freigabe über einen individuellen Kundenfall aus Kopiervorlage.
+- Selektive Freigabe bedeutet:
+  - Vertrieb erstellt selbst einen neuen Freigabefall,
+  - referenziert nur die gewünschten Bilder/Videos,
+  - teilt anschließend genau den Link dieses Kundenfalls.
+- Keine Medienkopie pro Kunde.
 
 ## 4) UX für Vertrieb
-- Vertrieb arbeitet nur in 2 Schritten:
-  1. Asset hochladen und Metadaten setzen (`AssetType`, `Category`, `ShareSet`).
-  2. Empfänger wählen und passenden Set-Link teilen.
-- Keine manuelle Mehrfachablage, keine Seitenbearbeitung nötig.
-- Optional: kleine Referenztabelle "Empfänger → ShareSet-Link" direkt auf der Seite "Selektive Freigabe".
+- Ziel: Vertrieb arbeitet ohne Admin in maximal 6 Schritten.
+- Empfohlener Ablauf:
+  1. Vorlage `Customer Share Template` kopieren oder neuen Eintrag in `Customer Shares` anlegen.
+  2. `CustomerName` und `ShareTitle` setzen.
+  3. Gewünschte Bilder/Videos in `Media` auswählen.
+  4. Auswahl in `SelectedAssets` hinterlegen.
+  5. Freigabeansicht prüfen.
+  6. Link kopieren und senden.
+- Optional: Power-Automate-Schritt für automatische Linkerzeugung/E-Mail.
 
 ## 5) Umsetzung in SharePoint-Komponenten
-- Bibliotheksansichten:
+- Bibliothek `Media`.
+- Liste `Customer Shares` mit Formular für Freigabefälle.
+- Vorlage `Customer Share Template` oder Listenvorlage für wiederholbare Kundenfälle.
+- Standardansichten:
   - `View_ALL_MEDIA`
   - `View_ALL_VIDEOS`
-  - `View_A_3_VIDEOS`
-  - `View_B_4_VIDEOS`
-- Startseite:
-  - Quick Links: "Alles teilen", "Alle Videos", "Alle Bilder", "Selektive Sets"
-  - Highlighted Content für "Neueste Medien"
-- Optionaler Power-Automate-Flow:
-  - Input: Empfänger + ShareSet
-  - Output: automatischer E-Mail-Versand mit passendem Link
+  - `View_ALL_IMAGES`
+- Kundenfall-Ansicht mit Webpart oder Liste, die `SelectedAssets` rendert.
 
 ## 6) Berechtigungen und Sicherheit
 - Interne Rollen:
-  - `MediaHub Owners` (Admin)
-  - `MediaHub Contributors` (Vertrieb/Content-Pflege)
-  - `MediaHub Readers` (interne Leser)
-- Externe Nutzung:
-  - je nach Policy `Anyone` oder `Specific people` Links
-  - grundsätzlich nur View-Berechtigung
+  - `MediaHub Owners`
+  - `MediaHub Contributors`
+  - `MediaHub Readers`
+- Vertrieb (`Contributors`) darf neue Kundenfälle selbst erstellen.
+- Externe Empfänger erhalten ausschließlich View-Berechtigung auf den jeweiligen Freigabelink.
 - Zusätzliche Leitplanken:
-  - Link-Expiry (falls policy-konform)
-  - periodische Link-Reviews
-  - Audit-Auswertung für externe Freigaben
+  - Link-Expiry wenn policy-konform,
+  - Review-Feld im Freigabefall,
+  - Auditierbare Eigentümerschaft (`Owner`).
 
 ## 7) Betriebsmodell
-- Wöchentlicher Kurzcheck (Vertrieb):
-  - Sind neue Assets korrekt getaggt?
-  - Stimmen ShareSets?
-- Monatlicher Governance-Check (IT/Admin):
-  - Externe Links aktiv und korrekt?
-  - Alte Sets/Empfänger bereinigen
-  - Zugriffs- und Audit-Review
+- Einmalige Initialeinrichtung durch Admin/IT:
+  - Bibliothek `Media`,
+  - Liste oder Vorlage für `Customer Shares`,
+  - Berechtigungen,
+  - Basisnavigation.
+- Danach laufender Betrieb durch Vertrieb:
+  - neue Kundenfälle selbst anlegen,
+  - Medien referenzieren,
+  - Links teilen,
+  - abgelaufene Fälle prüfen.
 
 ## 8) Erfolgskriterien
-- Jedes Video ist physisch nur einmal vorhanden.
-- "Alles teilen" dauert für Vertrieb <1 Minute (ein Link).
-- Selektives Teilen für Person A/B erfolgt ohne Dateikopie.
-- Dauerempfänger (XYZ) erhalten über `ALL_MEDIA` immer den vollständigen Bestand.
+- Jedes Medium ist physisch nur einmal vorhanden.
+- Vertrieb kann einen neuen selektiven Kundenfall ohne Admin-Unterstützung erstellen.
+- Bilder und Videos können im selben Kundenfall kombiniert werden.
+- Ein Kunde erhält genau die selektierten Medien über einen einzelnen Link.

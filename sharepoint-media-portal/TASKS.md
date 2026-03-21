@@ -1,41 +1,41 @@
 # TASKS
 
-- [ ] Kommunikationswebsite "Product Media Hub" erstellen (oder bestehende dedizierte Site vorbereiten).
-- [ ] Bibliothek `Media` als einzige Quelle anlegen/validieren.
-- [ ] Metadaten-Spalten anlegen:
-  - [ ] `AssetType` (Video/Bild)
+- [ ] Dedizierte SharePoint-Site für den Media Hub erstellen oder vorbereiten.
+- [ ] Bibliothek `Media` als einzige Medienquelle anlegen/validieren.
+- [ ] Metadaten-Spalten in `Media` anlegen:
+  - [ ] `AssetType`
   - [ ] `Category`
-  - [ ] `ShareSet` (Mehrfachauswahl)
-  - [ ] `AudiencePolicy` (`AlwaysAll`, `Selective`)
-- [ ] Pflichtfelder definieren: mindestens `AssetType`, `ShareSet`.
-- [ ] ShareSets initial konfigurieren:
-  - [ ] `ALL_MEDIA`
-  - [ ] `ALL_VIDEOS`
-  - [ ] `A_3_VIDEOS`
-  - [ ] `B_4_VIDEOS`
-- [ ] Bestehende Assets mappen:
-  - [ ] relevante 3 Videos für Person A taggen (`A_3_VIDEOS`)
-  - [ ] relevante 4 Videos für Person B taggen (`B_4_VIDEOS`)
-  - [ ] alle Videos/Bilder für Dauerempfänger XYZ mit `ALL_MEDIA` sicherstellen
-- [ ] Bibliotheksansichten erstellen:
+  - [ ] optional `Language`
+  - [ ] optional `Region`
+  - [ ] optional `ReleaseStatus`
+- [ ] Struktur für Freigabefälle anlegen:
+  - [ ] Liste `Customer Shares` oder gleichwertige Struktur erstellen
+  - [ ] Felder `CustomerName`, `ShareTitle`, `SelectedAssets`, `LinkType`, `ExpiryDate`, `Owner` anlegen
+- [ ] Kopiervorlage vorbereiten:
+  - [ ] `Customer Share Template` mit vordefiniertem Layout anlegen
+  - [ ] Mustertext und Prüfschritte für Vertrieb hinterlegen
+- [ ] Standardfreigaben konfigurieren:
   - [ ] `View_ALL_MEDIA`
   - [ ] `View_ALL_VIDEOS`
-  - [ ] `View_A_3_VIDEOS`
-  - [ ] `View_B_4_VIDEOS`
-- [ ] Seite/Quick-Links bauen:
-  - [ ] "Alles teilen" (Link auf `View_ALL_MEDIA`)
-  - [ ] "Selektive Freigabe" (Links auf A/B-Views)
-- [ ] Berechtigungsgruppen prüfen und zuweisen:
+  - [ ] `View_ALL_IMAGES`
+- [ ] Selektive Freigabe für Vertrieb vorbereiten:
+  - [ ] Formular oder Bearbeitungsmaske für neuen Kundenfall testen
+  - [ ] Auswahl von Bildern und Videos in `SelectedAssets` ermöglichen
+  - [ ] Kundenfall-Ansicht zur Vorschau der selektierten Medien bereitstellen
+- [ ] Berechtigungen prüfen und zuweisen:
   - [ ] `MediaHub Owners`
   - [ ] `MediaHub Contributors`
   - [ ] `MediaHub Readers`
+  - [ ] Contributors dürfen neue Kundenfälle selbst anlegen
 - [ ] Externe Linkstrategie festlegen (`Anyone` oder `Specific people`) und dokumentieren.
 - [ ] Kurzanleitung für Vertrieb erstellen:
-  - [ ] Upload + Tagging
-  - [ ] Welcher Link für welchen Empfänger
+  - [ ] neuen Kundenfall aus Vorlage anlegen
+  - [ ] Medien selektieren
+  - [ ] Vorschau prüfen
+  - [ ] Link teilen
 - [ ] Testfälle durchführen:
-  - [ ] Person A sieht nur 3 definierte Videos
-  - [ ] Person B sieht nur 4 definierte Videos
-  - [ ] Person XYZ sieht alle Videos und Bilder
-  - [ ] Keine Medienkopie wurde erzeugt
-- [ ] Go-Live nach erfolgreicher Abnahme durch Vertrieb + IT-Governance.
+  - [ ] Vertrieb erstellt ohne Admin einen neuen Kundenfall
+  - [ ] Kunde sieht nur die selektierten Bilder und Videos
+  - [ ] Bilder und Videos werden ohne Kopie kombiniert dargestellt
+  - [ ] Standardlink `ALL_MEDIA` funktioniert weiterhin
+- [ ] Go-Live nach erfolgreicher Abnahme durch Vertrieb und IT-Governance.
